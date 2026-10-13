@@ -1,4 +1,4 @@
-import { Products } from '../models/products';
+import { Products } from '../models/products.js';
 
 //Displaying products, with filters optionally
 export async function getProducts(req,res) {
