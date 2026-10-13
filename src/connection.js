@@ -4,16 +4,15 @@ import 'dotenv/config';
 const MONGO_URI = process.env.MONGO_URI;
 
 export async function connectToMongoDB() {
-  try {
-    await mongoose.connect(MONGO_URI);
-    console.log("You successfully connected to MongoDB!");
-    return mongoose;
-  } catch (err) {
-    console.dir(err);
+  if (!MONGO_URI) {
+    throw new Error('MONGO_URI is missing from your environment variables.');
   }
+
+  await mongoose.connect(MONGO_URI);
+  console.log('Successfully connected to MongoDB!');
 }
 
-// Call this only when your application terminates
 export async function disconnectFromMongoDB() {
-  await mongoose.connection.close();
+  await mongoose.disconnect();
+  console.log('Disconnected from MongoDB.');
 }
