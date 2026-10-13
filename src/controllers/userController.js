@@ -91,3 +91,9 @@ export async function getCurrentUser(req, res) {
         });
     }
 }
+
+export async function logout(req, res) {
+  return res.status(200).json({
+    message: 'Logged out successfully. Please discard your authentication token.'
+  });
+}
