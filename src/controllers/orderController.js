@@ -81,6 +81,52 @@ export async function createOrder(req, res) {
     }
 }
 
-//getMyOrders()	
-//getMyOrderById()
+export async function getMyOrders(req, res) {
+  try {
+    const orders = await Orders.find({ user: req.user.id })
+      .populate('items.product')
+      .sort({ createdAt: -1 });
 
+    return res.status(200).json({
+      count: orders.length,
+      orders
+    });
+  } catch (err) {
+    console.error('Error fetching user orders:', err);
+
+    return res.status(500).json({
+      message: 'Failed to fetch orders.'
+    });
+  }
+}
+
+export async function getMyOrderById(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+      return res.status(400).json({
+        message: 'Invalid order ID.'
+      });
+    }
+
+    const order = await Orders.findOne({
+      _id: id,
+      user: req.user.id
+    }).populate('items.product');
+
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order not found.'
+      });
+    }
+
+    return res.status(200).json({ order });
+  } catch (err) {
+    console.error('Error fetching order:', err);
+
+    return res.status(500).json({
+      message: 'Failed to fetch order.'
+    });
+  }
+}
