@@ -19,7 +19,7 @@ const ProductSchema = new mongoose.Schema(
     },
     outfitUrl: { 
         type: String, 
-        required: true 
+        required: false 
     },
     price: { 
         type: Number, 
